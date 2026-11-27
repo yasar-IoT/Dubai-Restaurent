@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Dubai Restaurant — Authentic Arabic Mandi & Grills</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts for Royal Arabic-inspired Serif + Clean Modern Body -->
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background-color: #121619;
+      color: #F3F4F6;
+      /* Subtle Arabic geometric lattice background pattern */
+      background-image: radial-gradient(rgba(212, 175, 55, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    .font-arabic-title {
+      font-family: 'Cinzel', serif;
+    }
+    .gold-gradient {
+      background: linear-gradient(135deg, #F5C518 0%, #D49A1A 100%);
+    }
+    .arabic-arch-card {
+      border-top-left-radius: 1.5rem;
+      border-top-right-radius: 1.5rem;
+      border-bottom-left-radius: 0.75rem;
+      border-bottom-right-radius: 0.75rem;
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+  </style>
+</head>
+<body class="pb-28 antialiased">
+
+  <!-- 1. STICKY ARABIC ROYAL HEADER -->
+  <header class="sticky top-0 z-40 bg-[#1B2228]/95 backdrop-blur-md border-b border-amber-500/20 shadow-lg">
+    <div class="max-w-4xl mx-auto px-4 py-2.5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <!-- Restaurant Logo (Save your generated logo as logo.png in the same folder) -->
+        <img src="logo.png" alt="Dubai Restaurant Logo" 
+          class="w-12 h-12 rounded-xl object-cover border border-amber-400/50 shadow-md bg-[#263038]" />
+        <div>
+          <h1 class="font-arabic-title text-lg sm:text-xl font-bold text-amber-400 tracking-wide">
+            DUBAI RESTAURANT
+          </h1>
+          <p class="text-[11px] text-gray-300 flex items-center gap-2">
+            <span>Authentic Mandi & Charcoal Grills</span>
+            <span class="text-sky-400 font-semibold hidden sm:inline">• +91 8870998866</span>
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <a href="tel:+918870998866" class="sm:hidden bg-sky-500/20 text-sky-300 border border-sky-400/30 px-2.5 py-1.5 rounded-lg text-xs font-semibold">
+          Call
+        </a>
+        <button id="btn-my-token" onclick="switchView('token')" 
+          class="hidden text-xs font-bold bg-amber-400 text-gray-950 px-3 py-1.5 rounded-full shadow animate-pulse">
+          Token <span id="header-token-text">#104</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Primary Navigation Tabs -->
+    <nav class="max-w-4xl mx-auto flex border-t border-white/10">
+      <button id="tab-menu" onclick="switchView('menu')" 
+        class="flex-1 py-3 text-xs sm:text-sm font-bold tracking-wider uppercase border-b-2 border-amber-400 text-amber-400 transition">
+        Order Mandi & Grills
+      </button>
+      <button id="tab-booking" onclick="switchView('booking')" 
+        class="flex-1 py-3 text-xs sm:text-sm font-bold tracking-wider uppercase border-b-2 border-transparent text-gray-400 hover:text-gray-200 transition">
+        Book Majlis / Table
+      </button>
+    </nav>
+  </header>
+
+  <main class="max-w-4xl mx-auto px-4 pt-4">
+
+    <!-- 2. HERO BANNER (ARABIC MANDI SHOWCASE) -->
+    <section id="hero-banner" class="relative rounded-2xl overflow-hidden mb-6 border border-amber-500/30 shadow-2xl">
+      <img src="https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=1200&q=80" 
+        alt="Royal Chicken Mandi Platter" class="w-full h-48 sm:h-60 object-cover brightness-50" />
+      <div class="absolute inset-0 bg-gradient-to-t from-[#121619] via-transparent to-black/40 flex flex-col justify-end p-5">
+        <span class="inline-block w-fit bg-red-600/90 text-white text-[10px] font-bold uppercase tracking-widest px-2.5 py-1 rounded mb-2">
+          Slow-Cooked Underground Pit Mandi
+        </span>
+        <h2 class="font-arabic-title text-2xl sm:text-3xl font-bold text-amber-400">
+          Royal Arabian Feast
+        </h2>
+        <p class="text-xs sm:text-sm text-gray-200 mt-1 max-w-lg">
+          Order online or reserve your family Majlis seating. Pay easily via Cash or UPI at the counter using your order token.
+        </p>
+      </div>
+    </section>
+
+    <!-- 3. VIEW: DIGITAL MENU -->
+    <section id="view-menu">
+      <!-- Search & Filter Bar -->
+      <div class="flex flex-col sm:flex-row gap-2.5 mb-4">
+        <input type="text" id="search-input" oninput="renderMenu()" placeholder="Search Mandi, Al-Faham, Shawarma, Tandoori..." 
+          class="flex-1 bg-[#1B2228] border border-amber-500/25 rounded-xl px-4 py-2.5 text-sm text-white placeholder-gray-400 focus:outline-none focus:border-amber-400" />
+      </div>
+
+      <!-- Category Pills -->
+      <div id="category-bar" class="flex gap-2 overflow-x-auto pb-3 mb-4 no-scrollbar">
+        <button onclick="setCategory('All', this)" class="cat-btn px-4 py-2 rounded-full text-xs font-bold gold-gradient text-gray-950 whitespace-nowrap shadow">
+          All Specialties
+        </button>
+        <button onclick="setCategory('Mandi', this)" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold bg-[#1B2228] border border-white/10 text-gray-300 whitespace-nowrap">
+          Arabian Mandi
+        </button>
+        <button onclick="setCategory('Grill & Al-Faham', this)" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold bg-[#1B2228] border border-white/10 text-gray-300 whitespace-nowrap">
+          Grill & Al-Faham
+        </button>
+        <button onclick="setCategory('Tandoor', this)" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold bg-[#1B2228] border border-white/10 text-gray-300 whitespace-nowrap">
+          Tandoor
+        </button>
+        <button onclick="setCategory('Shawarma', this)" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold bg-[#1B2228] border border-white/10 text-gray-300 whitespace-nowrap">
+          Shawarma
+        </button>
+        <button onclick="setCategory('Beverages', this)" class="cat-btn px-4 py-2 rounded-full text-xs font-semibold bg-[#1B2228] border border-white/10 text-gray-300 whitespace-nowrap">
+          Drinks & Desserts
+        </button>
+      </div>
+
+      <!-- Menu Cards Grid (Populated via JS with Food Photos) -->
+      <div id="menu-list" class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+    </section>
+
+    <!-- 4. VIEW: CHECKOUT (PAY AT COUNTER) -->
+    <section id="view-checkout" class="hidden max-w-xl mx-auto space-y-4">
+      <button onclick="switchView('menu')" class="text-xs font-bold text-amber-400 flex items-center gap-1">
+        ← Back to Menu
+      </button>
+      <h2 class="font-arabic-title text-xl font-bold text-amber-400">Confirm Your Feast</h2>
+
+      <!-- Cart Summary Box -->
+      <div id="checkout-items" class="bg-[#1B2228] p-4 rounded-2xl border border-amber-500/20 space-y-2.5 text-sm"></div>
+
+      <!-- Customer Details Form -->
+      <form id="order-form" onsubmit="placeOrder(event)" class="bg-[#1B2228] p-5 rounded-2xl border border-amber-500/20 space-y-4">
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1.5">Dining Preference</label>
+          <div class="grid grid-cols-2 gap-2.5">
+            <label class="border border-amber-500/30 bg-[#121619] rounded-xl p-3 flex items-center gap-2 text-sm cursor-pointer">
+              <input type="radio" name="order_type" value="DINE_IN" checked class="accent-amber-400" />
+              <span>Dine-In / Majlis</span>
+            </label>
+            <label class="border border-amber-500/30 bg-[#121619] rounded-xl p-3 flex items-center gap-2 text-sm cursor-pointer">
+              <input type="radio" name="order_type" value="TAKEAWAY" class="accent-amber-400" />
+              <span>Takeaway Parcel</span>
+            </label>
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Your Name *</label>
+          <input type="text" id="cust-name" required placeholder="Enter your full name" 
+            class="w-full bg-[#121619] border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400" />
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-gray-300 mb-1">Mobile Number *</label>
+          <input type="tel" id="cust-phone" required pattern="[0-9]{10}" placeholder="10-digit mobile number" 
+            class="w-full bg-[#121619] border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-amber-400" />
+        </div>
+
+        <!-- Offline Counter Payment Notice -->
+        <div class="bg-amber-500/10 border border-amber-400/40 rounded-xl p-3.5 text-xs text-amber-200 leading-relaxed">
+          <strong class="text-amber-400 block mb-0.5">Payment: Pay at Counter (Cash / Counter UPI)</strong>
+          No online payment needed right now. Show your generated <strong>Order Token</strong> at the Dubai Restaurant billing counter to pay.
+        </div>
+
+        <button type="submit" class="w-full gold-gradient text-gray-950 font-extrabold py-3.5 rounded-xl text-sm uppercase tracking-wider shadow-lg">
+          Generate Order Token
+        </button>
+      </form>
+    </section>
+
+    <!-- 5. VIEW: MAJLIS & TABLE SLOT BOOKING -->
+    <section id="view-booking" class="hidden max-w-xl mx-auto space-y-4">
+      <div class="bg-[#1B2228] p-5 rounded-2xl border border-amber-500/20">
+        <h2 class="font-arabic-title text-xl font-bold text-amber-400">Book Table / Family Majlis</h2>
+        <p class="text-xs text-gray-400 mt-1">Reserve your spot for Mandi platters without waiting in queue.</p>
+
+        <form id="booking-form" onsubmit="confirmBooking(event)" class="mt-4 space-y-4">
+          <div class="grid grid-cols-2 gap-3">
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Select Date *</label>
+              <input type="date" id="book-date" required 
+                class="w-full bg-[#121619] border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white" />
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-1">Guests *</label>
+              <select id="book-guests" class="w-full bg-[#121619] border border-white/15 rounded-xl px-3 py-2.5 text-sm text-white">
+                <option value="2">2 Guests (Table)</option>
+                <option value="4">4 Guests (Table / Majlis)</option>
+                <option value="6">6 Guests (Family Majlis)</option>
+                <option value="10">8–12 Guests (Grand Majlis)</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1.5">Available Dining Slots *</label>
+            <div id="slot-grid" class="grid grid-cols-2 gap-2.5"></div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Your Name *</label>
+            <input type="text" id="book-name" required placeholder="Enter your name" 
+              class="w-full bg-[#121619] border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white" />
+          </div>
+
+          <div>
+            <label class="block text-xs font-semibold text-gray-300 mb-1">Mobile Number *</label>
+            <input type="tel" id="book-phone" required pattern="[0-9]{10}" placeholder="10-digit mobile number" 
+              class="w-full bg-[#121619] border border-white/15 rounded-xl px-3.5 py-2.5 text-sm text-white" />
+          </div>
+
+          <button type="submit" class="w-full gold-gradient text-gray-950 font-extrabold py-3.5 rounded-xl text-sm uppercase tracking-wider shadow-lg">
+            Confirm Slot Reservation
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- 6. VIEW: TOKEN & BOOKING CONFIRMATION -->
+    <section id="view-token" class="hidden max-w-md mx-auto">
+      <div class="bg-[#1B2228] p-6 rounded-3xl border-2 border-amber-400/50 shadow-2xl text-center space-y-4">
+        <img src="logo.png" alt="Dubai Restaurant" class="w-16 h-16 mx-auto rounded-2xl border border-amber-400/40 object-cover" />
+        <span id="confirm-badge" class="inline-block bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-xs font-bold px-3.5 py-1 rounded-full">
+          ORDER CONFIRMED
+        </span>
+        <p id="confirm-subtitle" class="text-xs text-gray-400 uppercase tracking-widest">Show This Token at Counter</p>
+        <div id="display-token-number" class="font-arabic-title text-5xl font-extrabold text-amber-400 tracking-wider">
+          #104
+        </div>
+        <p id="confirm-instructions" class="text-xs text-gray-300 leading-relaxed">
+          Please tell this token number at the <strong class="text-white">Dubai Restaurant</strong> billing counter to complete your cash/UPI payment.
+        </p>
+        <div id="confirm-details-box" class="bg-[#121619] rounded-xl p-3.5 text-left text-xs space-y-2 border border-white/10"></div>
+        <button onclick="switchView('menu')" class="w-full border border-amber-400/40 text-amber-300 hover:bg-amber-400/10 py-3 rounded-xl text-xs font-bold uppercase tracking-wider">
+          Back to Menu
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 7. STICKY BOTTOM CART BAR -->
+  <div id="sticky-cart-bar" class="hidden fixed bottom-0 inset-x-0 bg-[#1B2228] border-t border-amber-400/40 px-4 py-3 shadow-2xl z-40">
+    <div class="max-w-4xl mx-auto flex items-center justify-between">
+      <div>
+        <div class="text-[11px] text-amber-300 font-semibold uppercase tracking-wider">
+          <span id="cart-count">0</span> Items Selected
+        </div>
+        <div class="font-bold text-lg text-white">₹<span id="cart-total">0</span></div>
+      </div>
+      <button onclick="switchView('checkout')" class="gold-gradient text-gray-950 font-extrabold px-6 py-2.5 rounded-xl text-sm shadow-lg">
+        View Cart & Order →
+      </button>
+    </div>
+  </div>
+
+  <!-- 8. INTERACTIVE FRONTEND LOGIC (MENU, IMAGES, CART & SLOTS) -->
+  <script>
+    // Pre-existing high-res food photography for Mandi, Al-Faham Grill, Tandoor & Shawarma
+    const MENU_ITEMS = [
+      {
+        id: 1,
+        name: "Royal Chicken Kuzhi Mandi (Full)",
+        category: "Mandi",
+        price: 780,
+        desc: "Aromatic long-grain basmati rice cooked in underground pit with 4 tender spiced chicken pieces, mayonnaise & tomato salsa.",
+        img: "https://images.unsplash.com/photo-1633945274405-b6c8069047b0?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 2,
+        name: "Mutton Juicy Mandi Platter",
+        category: "Mandi",
+        price: 960,
+        desc: "Slow-roasted fall-off-the-bone mutton served over smoky saffron mandi rice with roasted nuts & garlic dip.",
+        img: "https://images.unsplash.com/photo-1589302168068-964664d93dc0?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 3,
+        name: "Peri-Peri Al-Faham Mandi (Half)",
+        category: "Mandi",
+        price: 440,
+        desc: "Charcoal-grilled spicy Peri-Peri Al-Faham paired with fragrant Arabian Mandi rice and kuboos.",
+        img: "https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 4,
+        name: "Charcoal Al-Faham Dajaj (Full)",
+        category: "Grill & Al-Faham",
+        price: 480,
+        desc: "Overnight marinated whole chicken grilled over live wood charcoal, served with garlic toum & pickled veggies.",
+        img: "https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 5,
+        name: "Honey Chilli BBQ Grill Chicken",
+        category: "Grill & Al-Faham",
+        price: 510,
+        desc: "Smoky flame-grilled chicken glazed with Arabian spices and wild honey.",
+        img: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 6,
+        name: "Royal Tandoori Chicken Platter",
+        category: "Tandoor",
+        price: 450,
+        desc: "Clay-oven roasted chicken marinated in hung curd, Kashmiri chilli, and aromatic garam masala.",
+        img: "https://images.unsplash.com/photo-1599487488170-d11ec9c172f0?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 7,
+        name: "Seekh Kebab & Tikka Tandoor Mix",
+        category: "Tandoor",
+        price: 390,
+        desc: "Assorted minced lamb seekh kebabs and malai chicken tikka straight from the tandoor.",
+        img: "https://images.unsplash.com/photo-1603360946369-dc9bb6258143?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 8,
+        name: "Lebanese Whole Meat Shawarma Roll",
+        category: "Shawarma",
+        price: 160,
+        desc: "Warm rumali/kuboos wrapped with shaved rotisserie chicken, fries, pickled turnips & creamy garlic sauce.",
+        img: "https://images.unsplash.com/photo-1529006557810-274b9b2fc783?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 9,
+        name: "Arabic Plate Shawarma Special",
+        category: "Shawarma",
+        price: 230,
+        desc: "Generous serving of spiced rotisserie meat with 2 kuboos, hummus, garlic mayo & spicy harissa.",
+        img: "https://images.unsplash.com/photo-1561651823-34feb02250e4?auto=format&fit=crop&w=600&q=80"
+      },
+      {
+        id: 10,
+        name: "Kunafa with Sweet Cheese & Pistachio",
+        category: "Beverages",
+        price: 210,
+        desc: "Crispy golden spun pastry layered with melted sweet cheese, rose-sugar syrup & crushed pistachios.",
+        img: "https://images.unsplash.com/photo-1579372786545-d24232daf58c?auto=format&fit=crop&w=600&q=80"
+      }
+    ];
+
+    const TIME_SLOTS = [
+      { id: 1, time: "12:30 PM - 01:30 PM", left: 6 },
+      { id: 2, time: "01:30 PM - 02:30 PM", left: 3 },
+      { id: 3, time: "07:00 PM - 08:00 PM", left: 5 },
+      { id: 4, time: "08:00 PM - 09:00 PM", left: 2 },
+      { id: 5, time: "09:00 PM - 10:00 PM", left: 4 },
+      { id: 6, time: "10:00 PM - 11:00 PM", left: 0 }
+    ];
+
+    let selectedCategory = "All";
+    let cart = {}; // { itemId: quantity }
+    let selectedSlot = TIME_SLOTS[2].time;
+
+    // Initialize date picker to today
+    document.getElementById("book-date").valueAsDate = new Date();
+
+    function switchView(view) {
+      ["menu", "checkout", "booking", "token"].forEach(v => {
+        document.getElementById(`view-${v}`).classList.add("hidden");
+      });
+      document.getElementById(`view-${view}`).classList.remove("hidden");
+
+      // Show hero banner only on menu view
+      document.getElementById("hero-banner").classList.toggle("hidden", view !== "menu");
+
+      // Update Tab highlights
+      const tabMenu = document.getElementById("tab-menu");
+      const tabBook = document.getElementById("tab-booking");
+      if (view === "menu" || view === "checkout") {
+        tabMenu.className = "flex-1 py-3 text-xs sm:text-sm font-bold tracking-wider uppercase border-b-2 border-amber-400 text-amber-400 transition";
+        tabBook.className = "flex-1 py-3 text-xs sm:text-sm font-bold tracking-wider uppercase border-b-2 border-transparent text-gray-400 hover:text-gray-200 transition";
+      } else if (view === "booking") {
+        tabBook.className = "flex-1 py-3 text-xs sm:text-sm font-bold tracking-wider uppercase border-b-2 border-amber-400 text-amber-400 transition";
+        tabMenu.className = "flex-1 py-3 text-xs sm:text-sm font-bold tracking-wider uppercase border-b-2 border-transparent text-gray-400 hover:text-gray-200 transition";
+      }
+
+      if (view === "checkout") renderCheckout();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function setCategory(cat, btnEl) {
+      selectedCategory = cat;
+      document.querySelectorAll(".cat-btn").forEach(b => {
+        b.className = "cat-btn px-4 py-2 rounded-full text-xs font-semibold bg-[#1B2228] border border-white/10 text-gray-300 whitespace-nowrap";
+      });
+      btnEl.className = "cat-btn px-4 py-2 rounded-full text-xs font-bold gold-gradient text-gray-950 whitespace-nowrap shadow";
+      renderMenu();
+    }
+
+    function updateCart(id, delta) {
+      cart[id] = (cart[id] || 0) + delta;
+      if (cart[id] <= 0) delete cart[id];
+      renderMenu();
+      updateBottomBar();
+    }
+
+    function updateBottomBar() {
+      let count = 0, total = 0;
+      for (const [id, qty] of Object.entries(cart)) {
+        const item = MENU_ITEMS.find(i => i.id == id);
+        if (item) { count += qty; total += item.price * qty; }
+      }
+      document.getElementById("cart-count").innerText = count;
+      document.getElementById("cart-total").innerText = total;
+      document.getElementById("sticky-cart-bar").classList.toggle("hidden", count === 0);
+    }
+
+    function renderMenu() {
+      const q = document.getElementById("search-input").value.toLowerCase();
+      const filtered = MENU_ITEMS.filter(item => {
+        const matchCat = selectedCategory === "All" || item.category === selectedCategory;
+        const matchSearch = item.name.toLowerCase().includes(q) || item.desc.toLowerCase().includes(q);
+        return matchCat && matchSearch;
+      });
+
+      const container = document.getElementById("menu-list");
+      container.innerHTML = filtered.map(item => {
+        const qty = cart[item.id] || 0;
+        return `
+          <div class="bg-[#1B2228] arabic-arch-card overflow-hidden border border-amber-500/15 shadow-lg flex flex-col justify-between">
+            <div>
+              <div class="relative h-44 overflow-hidden">
+                <img src="${item.img}" alt="${item.name}" class="w-full h-full object-cover hover:scale-105 transition duration-500" />
+                <span class="absolute top-3 left-3 bg-black/75 backdrop-blur-sm text-amber-300 text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-full border border-amber-400/30">
+                  ${item.category}
+                </span>
+              </div>
+              <div class="p-4">
+                <h3 class="font-bold text-base text-white">${item.name}</h3>
+                <p class="text-xs text-gray-400 mt-1 line-clamp-2">${item.desc}</p>
+              </div>
+            </div>
+            <div class="px-4 pb-4 pt-1 flex items-center justify-between">
+              <span class="text-lg font-extrabold text-amber-400">₹${item.price}</span>
+              ${qty === 0 ? `
+                <button onclick="updateCart(${item.id}, 1)" 
+                  class="px-4 py-2 rounded-xl text-xs font-extrabold uppercase tracking-wider bg-amber-400/15 text-amber-300 border border-amber-400/40 hover:bg-amber-400 hover:text-gray-950 transition">
+                  + Add
+                </button>
+              ` : `
+                <div class="flex items-center gap-3 bg-[#121619] border border-amber-400/50 rounded-xl px-2.5 py-1.5">
+                  <button onclick="updateCart(${item.id}, -1)" class="text-amber-400 font-bold px-1.5">−</button>
+                  <span class="text-sm font-bold text-white">${qty}</span>
+                  <button onclick="updateCart(${item.id}, 1)" class="text-amber-400 font-bold px-1.5">+</button>
+                </div>
+              `}
+            </div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function renderCheckout() {
+      let total = 0;
+      const rows = Object.entries(cart).map(([id, qty]) => {
+        const item = MENU_ITEMS.find(i => i.id == id);
+        const sub = item.price * qty;
+        total += sub;
+        return `<div class="flex justify-between text-gray-200"><span>${item.name} × ${qty}</span><span class="font-bold">₹${sub}</span></div>`;
+      }).join("");
+
+      document.getElementById("checkout-items").innerHTML = `
+        ${rows}
+        <div class="border-t border-white/10 pt-2.5 mt-2.5 flex justify-between text-base font-extrabold text-amber-400">
+          <span>Total Payable at Counter</span>
+          <span>₹${total}</span>
+        </div>
+      `;
+    }
+
+    function renderSlots() {
+      document.getElementById("slot-grid").innerHTML = TIME_SLOTS.map(s => {
+        const isFull = s.left === 0;
+        const isSelected = selectedSlot === s.time && !isFull;
+        return `
+          <button type="button" ${isFull ? "disabled" : `onclick="selectSlot('${s.time}')"`}
+            class="p-3 rounded-xl border text-left transition ${
+              isFull ? "border-white/5 bg-white/5 opacity-40 cursor-not-allowed" :
+              isSelected ? "border-amber-400 bg-amber-400/15 text-white" :
+              "border-white/15 bg-[#121619] text-gray-300 hover:border-amber-400/40"
+            }">
+            <div class="text-xs font-bold">${s.time}</div>
+            <div class="text-[11px] mt-0.5 ${isFull ? "text-red-400" : "text-emerald-400"}">
+              ${isFull ? "Slot Full" : `${s.left} Majlis/Tables left`}
+            </div>
+          </button>
+        `;
+      }).join("");
+    }
+
+    function selectSlot(time) {
+      selectedSlot = time;
+      renderSlots();
+    }
+
+    function placeOrder(e) {
+      e.preventDefault();
+      const token = "#" + Math.floor(101 + Math.random() * 89);
+      const name = document.getElementById("cust-name").value;
+      const type = document.querySelector('input[name="order_type"]:checked').value;
+      const total = document.getElementById("cart-total").innerText;
+
+      document.getElementById("confirm-badge").innerText = "FOOD ORDER PLACED";
+      document.getElementById("confirm-subtitle").innerText = "Your Counter Token Number";
+      document.getElementById("display-token-number").innerText = token;
+      document.getElementById("header-token-text").innerText = token;
+      document.getElementById("btn-my-token").classList.remove("hidden");
+
+      document.getElementById("confirm-details-box").innerHTML = `
+        <div class="flex justify-between"><span class="text-gray-400">Customer:</span><strong class="text-white">${name}</strong></div>
+        <div class="flex justify-between"><span class="text-gray-400">Order Mode:</span><strong class="text-amber-300">${type}</strong></div>
+        <div class="flex justify-between"><span class="text-gray-400">Bill Amount:</span><strong class="text-white">₹${total}</strong></div>
+        <div class="flex justify-between"><span class="text-gray-400">Payment:</span><strong class="text-amber-400">UNPAID (Pay at Counter)</strong></div>
+      `;
+
+      cart = {};
+      updateBottomBar();
+      renderMenu();
+      switchView("token");
+    }
+
+    function confirmBooking(e) {
+      e.preventDefault();
+      const code = "MJL-" + Math.floor(201 + Math.random() * 98);
+      const name = document.getElementById("book-name").value;
+      const date = document.getElementById("book-date").value;
+      const guests = document.getElementById("book-guests").value;
+
+      document.getElementById("confirm-badge").innerText = "SLOT RESERVED";
+      document.getElementById("confirm-subtitle").innerText = "Your Majlis / Table Code";
+      document.getElementById("display-token-number").innerText = code;
+
+      document.getElementById("confirm-details-box").innerHTML = `
+        <div class="flex justify-between"><span class="text-gray-400">Guest Name:</span><strong class="text-white">${name}</strong></div>
+        <div class="flex justify-between"><span class="text-gray-400">Date & Slot:</span><strong class="text-amber-300">${date} • ${selectedSlot}</strong></div>
+        <div class="flex justify-between"><span class="text-gray-400">Party Size:</span><strong class="text-white">${guests} Guests</strong></div>
+      `;
+      switchView("token");
+    }
+
+    // Initial render
+    renderMenu();
+    renderSlots();
+  </script>
+</body>
+</html>
